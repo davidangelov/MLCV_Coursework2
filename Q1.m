@@ -1,6 +1,5 @@
-A = imread('cat.png');
-cluster_num = 10;
-X = [0.25,0.75;0.25,0.25;0.75,0.25;0.75,0.75];
+A = imread('blackandyellow.png');
+cluster_num = 8;
 
 red = A(:,:,1);
 green = A(:,:,2);
@@ -19,7 +18,22 @@ scatter3(red_vector, green_vector, blue_vector, '.');
 figure(2);
 imshow(A);
 
-[idx,C] = kmeans(RGB_vector,cluster_num,'MaxIter',100);
+rng(1)
+
+[~,C] = kmeans(RGB_vector,cluster_num,'MaxIter', 1, 'Start', 'plus');
+iteration_count = 1;
+
+[idx,C1] = kmeans(RGB_vector,cluster_num,'MaxIter',1, 'Start', C);
+Path_array(iteration_count, :) = reshape(C.', 1, cluster_num*3);
+iteration_count = iteration_count + 1;
+
+while ~isequal(C1,C)
+    C = C1;
+    [idx,C1] = kmeans(RGB_vector,cluster_num,'MaxIter',1, 'Start', C);
+    Path_array(iteration_count, :) = reshape(C.', 1, cluster_num*3);
+    iteration_count = iteration_count + 1;
+end
+
 figure(3);
 scatter3(RGB_vector(idx==1,1),RGB_vector(idx==1,2),RGB_vector(idx==1,3),'.', 'MarkerFaceColor', rand(1,3));
 if cluster_num > 1
@@ -28,7 +42,16 @@ hold on
         scatter3(RGB_vector(idx==i,1),RGB_vector(idx==i,2),RGB_vector(idx==i,3),'.', 'MarkerFaceColor',rand(1,3));
     end;
 end;
-% scatter3(RGB_vector(idx==2,1),RGB_vector(idx==2,2),RGB_vector(idx==2,3),'.','MarkerFaceColor',[0 .75 .75]);
-% scatter3(RGB_vector(idx==3,1),RGB_vector(idx==3,2),RGB_vector(idx==3,3),'.','MarkerFaceColor',[.75 .75 0]);
+hold off
+
+figure(4);
+hold on
+for i = 0:cluster_num-1
+    scatter3(Path_array(:,1+i*3),Path_array(:,2+i*3),Path_array(:,3+i*3),'.')
+    %line(Path_array(:,1+i*3),Path_array(:,2+i*3),Path_array(:,3+i*3))
+end
+plot3(Path_array(:,1+i*3),Path_array(:,2+i*3),Path_array(:,3+i*3))
 scatter3(C(:,1),C(:,2),C(:,3),'kx')
 hold off
+
+
