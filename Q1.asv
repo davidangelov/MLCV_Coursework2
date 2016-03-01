@@ -1,5 +1,5 @@
-A = imread('blackandyellow.png');
-cluster_num = 8;
+A = imread('cat.png');
+cluster_num = 20;
 
 red = A(:,:,1);
 green = A(:,:,2);
@@ -20,7 +20,8 @@ imshow(A);
 
 rng(1)
 
-[~,C] = kmeans(RGB_vector,cluster_num,'MaxIter', 1000, 'Start', 'plus');
+Path_array = zeros(
+[~,C] = kmeans(RGB_vector,cluster_num,'MaxIter', 1, 'Start', 'plus');
 iteration_count = 1;
 
 [idx,C1] = kmeans(RGB_vector,cluster_num,'MaxIter',1, 'Start', C);
@@ -48,10 +49,34 @@ figure(4);
 hold on
 for i = 0:cluster_num-1
     scatter3(Path_array(:,1+i*3),Path_array(:,2+i*3),Path_array(:,3+i*3),'.')
-    %line(Path_array(:,1+i*3),Path_array(:,2+i*3),Path_array(:,3+i*3))
+    line(Path_array(:,1+i*3),Path_array(:,2+i*3),Path_array(:,3+i*3))
 end
 plot3(Path_array(:,1+i*3),Path_array(:,2+i*3),Path_array(:,3+i*3))
 scatter3(C(:,1),C(:,2),C(:,3),'kx')
 hold off
 
+%Quantisation
+image_size = size(A);
+
+for i = 1:cluster_num
+    RGB_vector(idx==i,1) = C(i,1);
+    RGB_vector(idx==i,2) = C(i,2);
+    RGB_vector(idx==i,3) = C(i,3);
+end;
+
+red_Q = reshape(RGB_vector(:,1), image_size(1), image_size(2));
+green_Q = reshape(RGB_vector(:,2), image_size(1), image_size(2));
+blue_Q = reshape(RGB_vector(:,2), image_size(1), image_size(2));
+
+image_Q = zeros(image_size);
+
+image_Q(:,:,1) = red_Q;
+image_Q(:,:,2) = green_Q;
+image_Q(:,:,3) = blue_Q;
+
+image_Q = uint8(image_Q);
+result = A - image_Q;
+
+figure(5);
+imshow(image_Q);
 
