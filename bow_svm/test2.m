@@ -1,11 +1,16 @@
 % test 2
-% rng test
 
 clc;clear;close all;
 
-s = rng(1);
+% x = [1 2 3 4 5];
+% x = x.';
+% y = [2 2 2 2 2];
+% y = y.';
 
-x = rand(1,24);
+% group = ['a', 'a', 'c', 'b', 'c'].';
+% 
+% gscatter(x,y,group);
 
-rng(s);
+[data_train, data_test] = getData('Toy_Spiral');
 
+% num_class = unique(data_train(:,3));
