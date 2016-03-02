@@ -24,26 +24,23 @@ data_class_1(data_class ~= 1) = -1;
 data_class_2(data_class ~= 2) = -1;
 data_class_3(data_class ~= 3) = -1;
 
-SVM1 = fitcsvm(data_train_data, data_class_1,'KernelFunction', 'rbf','BoxConstraint',Inf);
-SVM2 = fitcsvm(data_train_data, data_class_2,'KernelFunction', 'rbf','BoxConstraint',Inf);
-SVM3 = fitcsvm(data_train_data, data_class_3,'KernelFunction', 'rbf','BoxConstraint',Inf);
+C = Inf; % max of C
+SVM1 = fitcsvm(data_train_data, data_class_1,'KernelFunction', 'rbf','BoxConstraint',C);
+SVM2 = fitcsvm(data_train_data, data_class_2,'KernelFunction', 'rbf','BoxConstraint',C);
+SVM3 = fitcsvm(data_train_data, data_class_3,'KernelFunction', 'rbf','BoxConstraint',C);
+% 
+% C = 20; % polynomial order
+% SVM1 = fitcsvm(data_train_data, data_class_1,'KernelFunction', 'polynomial','PolynomialOrder',C);
+% SVM2 = fitcsvm(data_train_data, data_class_2,'KernelFunction', 'polynomial','PolynomialOrder',C);
+% SVM3 = fitcsvm(data_train_data, data_class_3,'KernelFunction', 'polynomial','PolynomialOrder',C);
 
-predict_label_1 = predict(SVM1,data_test(:,1:2));
-predict_label_2 = predict(SVM2,data_test(:,1:2));
-predict_label_3 = predict(SVM3,data_test(:,1:2));
+[predict_label_1, score1] = predict(SVM1,data_test(:,1:2));
+[predict_label_2, score2] = predict(SVM2,data_test(:,1:2));
+[predict_label_3, score3] = predict(SVM3,data_test(:,1:2));
 
-figure(2)
-gscatter(data_test(:,1), data_test(:,2), predict_label_1,'kr');
-title('red');
-axis([-1.5 1.5 -1.5 1.5]);
+score = [score1(:,1), score2(:,1), score3(:,1)];
+[~, predict_label] = max(score,[],2);
 
-figure(3)
-gscatter(data_test(:,1), data_test(:,2), predict_label_2,'kg');
-title('green');
-axis([-1.5 1.5 -1.5 1.5]);
-
-figure(4)
-gscatter(data_test(:,1), data_test(:,2), predict_label_3,'kb');
-title('blue');
-axis([-1.5 1.5 -1.5 1.5]);
-
+figure(2) % M=3 SVM
+gscatter(data_test(:,1), data_test(:,2), predict_label, 'brg');
+axis([-1.5,1.5,-1.5,1.5]);
