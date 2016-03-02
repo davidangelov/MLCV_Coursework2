@@ -1,8 +1,8 @@
 clear;
 close all;
 
-A = imread('cat.png');
-cluster_num = 2;
+A = imread('colours.png');
+cluster_num = 10;
 
 red = A(:,:,1);
 green = A(:,:,2);
