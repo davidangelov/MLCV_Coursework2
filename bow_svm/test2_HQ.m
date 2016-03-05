@@ -11,11 +11,15 @@ clc;clear;close all;
 % 
 % gscatter(x,y,group);
 
-[data_train, data_test] = getData('Toy_Spiral');
+% [data_train, data_test] = getData('Toy_Spiral');
+% 
+% <<<<<<< HEAD
+% gkfkgfdkgfdklkgfdlkgfdlkfdlkgkdfl
+% 
+% =======
+% % num_class = unique(data_train(:,3));
+% >>>>>>> origin/master
 
-<<<<<<< HEAD
-gkfkgfdkgfdklkgfdlkgfdlkfdlkgkdfl
+x = [1 2 3; 4 5 6];
+ans = mode(x,2);
 
-=======
-% num_class = unique(data_train(:,3));
->>>>>>> origin/master
