@@ -24,7 +24,7 @@ data_class_1(data_class ~= 1) = -1;
 data_class_2(data_class ~= 2) = -1;
 data_class_3(data_class ~= 3) = -1;
 
-C = 1; % max of C
+C = Inf; % max of C
 SVM1 = fitcsvm(data_train_data, data_class_1,'KernelFunction', 'rbf','BoxConstraint',C);
 SVM2 = fitcsvm(data_train_data, data_class_2,'KernelFunction', 'rbf','BoxConstraint',C);
 SVM3 = fitcsvm(data_train_data, data_class_3,'KernelFunction', 'rbf','BoxConstraint',C);
@@ -44,7 +44,7 @@ score3_norm = (score3(:,1) - min(score3(:,1)))./(max(score3(:,1)) - min(score3(:
 
 score = [score1_norm, score2_norm, score3_norm];
 [~, predict_label] = max(score,[],2);
+data_test(:,end) = predict_label;
 
 figure(2) % M=3 SVM
-gscatter(data_test(:,1), data_test(:,2), predict_label, 'brg');
-axis([-1.5,1.5,-1.5,1.5]);
+plot_toydata(data_test);
