@@ -1,4 +1,4 @@
-function [ data_train, data_query ] = getData_HQ( MODE, K )
+function [ data_train, data_query ] = getData_HQ( MODE )
 % Generate training and testing data
 
 % Data Options:
@@ -96,6 +96,7 @@ switch MODE
             imgList = dir(fullfile(subFolderName,'*.jpg'));
             imgIdx{c} = randperm(length(imgList));
             imgIdx_tr = imgIdx{c}(1:imgSel(1));
+            imgIdx_te = imgIdx{c}(imgSel(1)+1:sum(imgSel));
             
             for i = 1:length(imgIdx_tr)
                 I = imread(fullfile(subFolderName,imgList(imgIdx_tr(i)).name));
@@ -127,23 +128,20 @@ switch MODE
         % write your own codes here
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         rng(1) % fix random seed (?)
-        cluster_num = K; % K
-        [C, ~] = vl_kmeans(desc_sel, cluster_num);
+        cluster_num = 5; % K
+        desc_sel = desc_sel.';
         
-%         desc_sel = desc_sel.';
-%         [~, C] = kmeans(desc_sel, cluster_num, 'MaxIter', 50, 'Start', 'plus');
+        [~,C] = kmeans(desc_sel,cluster_num,'MaxIter', 1, 'Start', 'plus');
+        iteration_count = 1;
+
+        [~,C1] = kmeans(desc_sel,cluster_num,'MaxIter',1, 'Start', C);
+        iteration_count = iteration_count + 1;
         
-%         [~,C] = kmeans(desc_sel,cluster_num,'MaxIter', 1, 'Start', 'plus');
-%         iteration_count = 1;
-% 
-%         [~,C1] = kmeans(desc_sel,cluster_num,'MaxIter',1, 'Start', C);
-%         iteration_count = iteration_count + 1;
-%         
-%         while ~isequal(C1,C)
-%             C = C1;
-%             [idx,C1] = kmeans(desc_sel,cluster_num,'MaxIter',1, 'Start', C);
-%             iteration_count = iteration_count + 1;
-%         end
+        while ~isequal(C1,C)
+            C = C1;
+            [idx,C1] = kmeans(desc_sel,cluster_num,'MaxIter',1, 'Start', C);
+            iteration_count = iteration_count + 1;
+        end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         disp('Encoding Images...')
@@ -159,7 +157,7 @@ switch MODE
            for i = 1:length(imgIdx_tr)
             train_image = desc_tr{c,i};
             % now generate histogram fNN
-            [assigned_cluster, ~] = fNN(train_image, C);
+            [assigned_cluster, ~] = fNN(train_image, C.');
             data_tr = zeros(1,cluster_num);
             
                for j = 1:cluster_num
@@ -218,21 +216,8 @@ switch MODE
         % data_query: [num_data x (dim+1)] Testing vectors with class labels
         % data_query(:,end): class labels
         data_query = [];
-        for c = 1:length(classList)
-            for i = 1:length(imgIdx_tr)
-                test_image = desc_te{c,i};
-                % now generate histogram fNN
-                [assigned_cluster, ~] = fNN(test_image, C);
-                data_te = zeros(1,cluster_num);
-            
-               for j = 1:cluster_num
-                   data_te(1,j) = length(find(assigned_cluster == j));
-               end
-               
-            data_query = [data_query; data_te, c];   
-            end
-       end
-       display('Training data completed');
+        
+        
         
     otherwise % Dense point for 2D toy data
         xrange = [-1.5 1.5];
