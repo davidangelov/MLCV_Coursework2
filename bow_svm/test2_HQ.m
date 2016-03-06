@@ -23,5 +23,8 @@ clc;clear;close all;
 % x = [1 2 3; 4 5 6];
 % ans = mode(x,2);
 
-x = magic(10);
-x(:,end) = 1;
+% x = magic(10);
+% x(:,end) = 1;
+
+x = struct;
+
