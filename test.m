@@ -1,1 +1,6 @@
-r1 = rand(1,3);
+clc;clear;close all;
+
+a = [1 2 3];
+
+
+[b, c] = mode(a);
