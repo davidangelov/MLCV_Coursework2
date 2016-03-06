@@ -152,21 +152,21 @@ switch MODE
         % data_train: [num_data x (dim+1)] Training vectors with class labels
         % data_train(:,end): class labels
         data_train = [];
-        
        for c = 1:length(classList)
            for i = 1:length(imgIdx_tr)
+               
             train_image = desc_tr{c,i};
             % now generate histogram fNN
-            [assigned_cluster, ~] = fNN(train_image, C.');
-            data_tr = zeros(1,cluster_num);
+            [assigned_cluster, ~] = fNN(train_image,C.');
+            data_tr = zeros(1,length(assinged_cluster));
+               for j = 1:length(assigned_cluster)
+                   data_tr
+                   
             
-               for j = 1:cluster_num
-                   data_tr(1,j) = length(find(assigned_cluster == j));
                end
                
-            data_train = [data_train; data_tr, c];   
-           end
        end
+        
         
        display('Training data completed');
         % Clear unused varibles to save memory

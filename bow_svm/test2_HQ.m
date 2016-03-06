@@ -20,6 +20,8 @@ clc;clear;close all;
 % % num_class = unique(data_train(:,3));
 % >>>>>>> origin/master
 
-x = [1 2 3; 4 5 6];
-ans = mode(x,2);
+% x = [1 2 3; 4 5 6];
+% ans = mode(x,2);
 
+x = magic(10);
+x(:,end) = 1;
