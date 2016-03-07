@@ -9,6 +9,8 @@ legend('Class 1','Class 2', 'Class 3');
 title('Training data');
 
 predict_label = fMSVM_1vR(data_train, data_test);
+
+%predict_label = fMSVM_1v1(data_train, data_test);
 data_test(:,end) = predict_label;
 
 figure(2) % M=3 SVM

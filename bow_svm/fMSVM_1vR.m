@@ -36,11 +36,12 @@ M = length(unique(data_train(:,end)));
         score = [score, score_one(:,2)];
         
     end
+    
 % C = 20; % polynomial order
 % SVM1 = fitcsvm(data_train_data, data_class_1,'KernelFunction', 'polynomial','PolynomialOrder',C);
 
 [~, predict_label] = max(score,[],2);
 
-display('SVM training and testing completed');
+display('1 vs Rest SVM training and testing completed');
 
 end
