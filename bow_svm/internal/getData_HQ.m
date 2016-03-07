@@ -126,7 +126,7 @@ switch MODE
         % K-means clustering
         % write your own codes here
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        rng(1) % fix random seed (?)
+        
         cluster_num = K; % K
         [C, ~] = vl_kmeans(desc_sel, cluster_num);
         
@@ -232,7 +232,7 @@ switch MODE
             data_query = [data_query; data_te, c];   
             end
        end
-       display('Training data completed');
+       display('Testing data completed');
         
     otherwise % Dense point for 2D toy data
         xrange = [-1.5 1.5];
