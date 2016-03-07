@@ -24,17 +24,16 @@ M = length(unique(data_train(:,end)));
         data_class(data_train(:,end) ~= class) = -1;
 
         % Train SVMs
-        C = Inf; % max of C
-        Kernel_Scale = 0.6;
+        C = 1; % max of C
         SVM = fitcsvm(data_train(:,1:end-1), data_class,...
-                'KernelFunction', 'rbf','BoxConstraint',C,'KernelScale',Kernel_Scale,...
+                'KernelFunction', 'rbf','BoxConstraint',C,'KernelScale','auto',...
                 'ClassNames',[-1,1]);
 %         num_supp_vectors = [num_supp_vectors, length(SVM.SupportVectors)];
 
         % test SVM
         [~, score_one] = predict(SVM,data_test(:,1:(end-1)));
-        score_one_norm = (score_one(:,2) - min(score_one(:,2)))/(max(score_one(:,2)) - min(score_one(:,2)));
-        score = [score, score_one_norm];
+%         score_one_norm = (score_one(:,2) - min(score_one(:,2)))/(max(score_one(:,2)) - min(score_one(:,2)));
+        score = [score, score_one(:,2)];
         
     end
 % C = 20; % polynomial order
