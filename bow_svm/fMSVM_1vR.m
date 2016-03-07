@@ -18,11 +18,11 @@ M = length(unique(data_train(:,end)));
 % num_supp_vectors = [];
 
     for class = 1:M
-
+        
         % Re-organise label for 1 vs Rest
         data_class = ones(numel(data_train(:,end)),1);
         data_class(data_train(:,end) ~= class) = -1;
-
+        
         % Train SVMs
         C = 1; % max of C
         SVM = fitcsvm(data_train(:,1:end-1), data_class,...
