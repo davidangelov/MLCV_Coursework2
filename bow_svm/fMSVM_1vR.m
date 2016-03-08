@@ -24,7 +24,7 @@ M = length(unique(data_train(:,end)));
         data_class(data_train(:,end) ~= class) = -1;
         
         % Train SVMs
-        C = 1; % max of C
+        C = Inf; % max of C
         SVM = fitcsvm(data_train(:,1:end-1), data_class,...
                 'KernelFunction', 'rbf','BoxConstraint',C,'KernelScale','auto',...
                 'ClassNames',[-1,1]);

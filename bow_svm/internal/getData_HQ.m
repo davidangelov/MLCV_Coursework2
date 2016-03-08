@@ -1,4 +1,4 @@
-function [ data_train, data_query ] = getData_HQ( MODE, K )
+function [ data_train, data_query, imgIdx] = getData_HQ( MODE, K )
 % Generate training and testing data
 
 % Data Options:

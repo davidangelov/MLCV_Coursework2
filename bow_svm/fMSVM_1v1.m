@@ -19,7 +19,7 @@ class_type = unique(data_train(:,end));
 M = length(class_type);
 %num_svm = M*(M-1)/2;
 vote = [];
-C = 1;
+C = Inf;
 Kernel_Scale = 'auto';
 
 for id_svm_i = 1 : M - 1

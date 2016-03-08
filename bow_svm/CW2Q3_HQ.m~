@@ -2,10 +2,10 @@ clc; clear; close all;
 
 init;
 
-[data_train, data_test, imgIdx] = getData_HQ('Caltech', 100);
+[data_train, data_test] = getData_HQ('Caltech', 100);
 
 %% 
-mode = 2; % 1 for 1vsRest, 2 for 1vs1
+mode = 1; % 1 for 1vsRest, 2 for 1vs1
 switch mode
     case 1
         predict_label = fMSVM_1vR(data_train, data_test);
@@ -18,14 +18,7 @@ display(correct_rate, 'Correction rate');
 
 %% Confusion matrix
 
-target = zeros(10,150);
-output = zeros(10,150);
+for i 
 
-for i = 1:150
-    
-    target(data_test(i,end), i) = 1;
-    output(predict_label(i,end), i) = 1;
-    
-end
 
 plotconfusion(target, output);
