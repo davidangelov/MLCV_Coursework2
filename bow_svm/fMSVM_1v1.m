@@ -36,7 +36,11 @@ for id_svm_i = 1 : M - 1
 end
 
 [predict_label, vote_freq, values_with_freq] = mode(vote, 2);
-S = length(cell2mat(values_with_freq));
-predict_label(length(cell2mat(values_with_freq)) ~= 1) = 0;
+
+for i = 1:length(values_with_freq) 
+    if length(cell2mat(values_with_freq(i,1))) ~= 1
+        predict_label(i,1) = 0;
+    end
+end
 
 end

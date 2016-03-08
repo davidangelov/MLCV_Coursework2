@@ -5,6 +5,7 @@ clc; clear; close all;
 
 figure(1) % plot training data
 plot_toydata(data_train);
+legend('Class 1','Class 2', 'Class 3');
 title('Training data');
 
 %% One-v-one M = 3
@@ -15,3 +16,4 @@ data_test(:,end) = predict_label;
 
 figure(2)
 plot_toydata(data_test);
+legend('Class 1','Class 2', 'Class 3');
