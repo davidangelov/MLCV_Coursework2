@@ -2,10 +2,10 @@ clc; clear; close all;
 
 init;
 
-[data_train, data_test] = getData_HQ('Caltech', 100);
+[data_train, data_test] = getData_DA('Caltech', 100);
 
 %% 
-mode = 1; % 1 for 1vsRest, 2 for 1vs1
+mode = 2; % 1 for 1vsRest, 2 for 1vs1
 switch mode
     case 1
         predict_label = fMSVM_1vR(data_train, data_test);
