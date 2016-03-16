@@ -18,14 +18,18 @@ display(correct_rate, 'Correction rate');
 
 %% Confusion matrix
 
-target = zeros(10,150);
-output = zeros(10,150);
+conf_mat = confusionmat(predict_label, data_test(:,end));
+imagesc(conf_mat); colorbar;
+xlabel('Target class'), ylabel('Predicted class');
 
-for i = 1:150
-    
-    target(data_test(i,end), i) = 1;
-    output(predict_label(i,end), i) = 1;
-    
-end
-
-plotconfusion(target, output);
+% target = zeros(10,150);
+% output = zeros(10,150);
+% 
+% for i = 1:150
+%     
+%     target(data_test(i,end), i) = 1;
+%     output(predict_label(i,end), i) = 1;
+%     
+% end
+% 
+% plotconfusion(target, output);
