@@ -3,7 +3,7 @@ clc; clear; close all;
 init;
 
 %% Data
-
+tic;
 [data_train, data_test] = getData_HQ('Caltech', 100);
 
 %% SVM
@@ -28,3 +28,5 @@ figure(1)
 conf_mat = confusionmat(predict_label, data_test(:,end));
 imagesc(conf_mat); colorbar;
 xlabel('Target class'), ylabel('Predicted class');
+
+toc;
