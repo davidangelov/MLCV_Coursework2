@@ -5,7 +5,16 @@ init;
 parfor k = 1:100
 [data_train, data_test] = getData_HQ('Caltech', k);
 
+%% Data
+[data_train, data_test] = getData_HQ('Caltech', 100);
+
+tic;
+K = 50;
+[data_train, data_test] = getData_HQ('Caltech', K);
+toc;
+
 %% SVM
+tic;
 kernel = 'RBF';
 C = 1000;
 sigma = 10000;
