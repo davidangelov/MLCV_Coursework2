@@ -1,8 +1,8 @@
 clc; clear; close all;
 
 init;
-
-[data_train, data_test] = getData_HQ('Caltech', 100);
+parfor k = 1:100
+[data_train, data_test] = getData_HQ('Caltech', k);
 
 %% 
 mode = 1; % 1 for 1vsRest, 2 for 1vs1
@@ -15,8 +15,10 @@ end
 
 correct_rate = length(find(predict_label == data_test(:,end)))/length(data_test(:,end));
 display(correct_rate, 'Correction rate');
-
+correct_rate_array(k) = correct_rate;
+end
 %% Confusion matrix
+plot(correct_rate_array);
 
 target = zeros(10,150);
 output = zeros(10,150);
