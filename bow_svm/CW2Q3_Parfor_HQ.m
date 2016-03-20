@@ -11,20 +11,21 @@ sigma_range = 2.^(5:5:40); % 8 of this
 % 8*9*10*time_per_loop
 
 kernel = 'RBF';
-mode = 'ovr';
+mode = 'ovo';
 
 %% loopssssss
 
 correct_rate_mean = zeros(length(C_range), length(sigma_range));
 
 for idx_C = 1:length(C_range)
-for idx_sigma = 1:length(sigma_range)
+C = C_range(idx_C);
+parfor idx_sigma = 1:length(sigma_range)
     
 sigma = sigma_range(idx_sigma);
-C = C_range(idx_C);
+
 correct_rate = zeros(1,10);
 
-parfor iter = 1:10
+for iter = 1:10
     
 [data_train, data_test] = getData_HQ('Caltech', K);
 

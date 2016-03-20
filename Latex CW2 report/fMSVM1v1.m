@@ -53,7 +53,7 @@ end
     % deal with fuzzy cases
     for i = 1:length(values_with_freq)
         if length(cell2mat(values_with_freq(i,1))) ~= 1
-            predict_label(i,1) = randi([0,max(class_type)], 1,1);
+            predict_label(i,1) = randi([1,max(class_type)], 1,1);
         end
     end
 

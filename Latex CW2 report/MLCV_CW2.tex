@@ -12,6 +12,7 @@
 \definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
 \definecolor{mylilas}{RGB}{170,55,241}
 \usepackage{subcaption}
+\usepackage{booktabs}
 
 % Include other packages here, before hyperref.
 
@@ -101,6 +102,7 @@ where $k(\boldsymbol{x}, \boldsymbol{x}_n) $ is the Kernel function. In this cou
 
 \begin{equation}
  k(\boldsymbol{x}, \boldsymbol{x'}) = exp(\frac{||\boldsymbol{x} - \boldsymbol{x'}||^2}{2 \sigma^2})
+ \label{eq:RBF}
 \end{equation}
 
 We considered the parameter $\sigma$ in the kernel function as the primary factor that affects the performance of RBF kernel SVM. We also considered the parameter $C$, which is an error weighting constant that penalizes the misclassification during the supervised learning and effectively controls the margin.
@@ -167,11 +169,9 @@ Similarly, Figure~\ref{fig:q2_ovo_3} and~\ref{fig:q2_ovo} show the results of in
 \end{figure}
 
 \subsection{SVM parameters}
-The parameters $\sigma$ for the RBF kernel function and the parameter $C$ for the misclassification penalty are problem dependent. Here we discuss the effect of the two parameters using the Toy Spiral data test. The kernel parameter $\sigma$ affects the generalization or complexity of the model. Simpler models could have better generalization to unseen data with the risk of underfitting. Complex models on the other hand could be overfitted to training data and results in high testing loss (i.e. lower classification accuracy). Figure (a), (b) and (c) in Figure~\ref{fig:q2_ovr_all} show the result of varying the parameter $\sigma$ while keeping $C$ unchanged. Result (a) demonstrates the case of overfitting and (c) demonstrates the case of underfitting.
+The parameters $\sigma$ for the RBF kernel function and the parameter $C$ for the misclassification penalty are problem dependent. Here we discuss the effect of the two parameters using the Toy Spiral data test. The kernel parameter $\sigma$ affects the generalization or complexity of the model. Simpler models could have better generalization to unseen data with the risk of underfitting. Complex models on the other hand could be overfitted to training data and results in high testing loss (i.e. lower classification accuracy). This can be reflected on the fact that the more complex the system gets, the more support vectors are utilised to construct the marginal boundaries. Figure (a), (b) and (c) in Figure~\ref{fig:q2_ovr_all} show the result of varying the parameter $\sigma$ while keeping $C$ unchanged. Result (a) demonstrates the case of overfitting and (c) demonstrates the case of underfitting.
 
-The parameter $C$ for each misclassified data point is proportional to its distance from the decision boundary. This indicates that $C$ controls the margin allowed for the SVMs. 
-
-
+The parameter $C$ for each misclassified data point is proportional to its distance from the decision boundary. This indicates that $C$ controls the margin allowed for the SVMs. The plots (d), (e) and (f) in FIgure~\ref{fig:q2_ovr_all} present the classification results of varying the parameter $C$ while keeping $\sigma$ unchanged. The result of (d) suggests that the model was underfitting when $C$ is low, while (e) and (f) indicate that the performance of the model could converges when $C$ is sufficiently large. We will further discuss the effects of the parameters $\sigma$ and $C$ in a numerical manner (accuracy) for the Caltech101 data set. 
 
 \begin{figure}
 
@@ -212,24 +212,161 @@ The parameter $C$ for each misclassified data point is proportional to its dista
 
 
 \section{Question 3}
+In this question, we performed image recognition using the Caltech101 data set. We randomly selected 15 images from each of the 10 different classes. The performance of the classification was evaluated by the correction rate of image classification. We investigated the following parameters that could affect the accuracy:
+
+\begin{itemize}
+	\item Vocabulary size = $K$
+	\item Kernel types (RBF and Polynomial) and kernel parameters ($\sigma$ for RBF, polynomial order $M$ for polynomial)
+	\item Misclassification penalty parameter $C$
+\end{itemize}
+
+
+\subsection{Bag of Words}
+Both training and testing images are transformed into data points for classification by the Bag-of-Words technique, which utilized the K-means clustering in Question 1. This process can be described as:
+
+\begin{enumerate}
+ \item Visual vocabulary construction (using K-means clustering)\\
+ We firstly apply the Scale Invariant Feature Transform (SIFT) descriptor to extract features (visual words) from each image. Each SIFT descriptor $\boldsymbol{d}$ has a dimension of $D = 128$. Then, we selected 100,000 descriptors and applied the K-means clustering. The K cluster centres found are called codewords or visual vocabulary.
+
+\item Histogram of visual words\\
+Each image was represented by a histogram of visual words, which is constructed by assigning the visual words to the codewords by the Nearest Neighbour matching and counting the number of words assigned to each codeword. The distance between visual words and codewords can be evaluated by the Euclidean distance, i.e.
+
+\begin{equation}
+ E(\boldsymbol{d_1}, \boldsymbol{d_2}) = || \boldsymbol{d_1} - \boldsymbol{d_2}||
+\end{equation}
+\end{enumerate}
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=1\linewidth]{q3_hist}
+		\caption{Histogram of sample training images: (a), (b) \& (c) training images, (d), (e) \& (f)}
+		\label{fig:q3_hist}
+	\end{center}
+\end{figure}
+
+
+
+Figure~\ref{fig:q3_hist} shows the histogram of some example training and testing images. The recognition problem was transformed to a data point based classification problem, which was then solved by the multi-class SVM classification. The accuracy of recognition was affected by value of $K$ as shown in Figure~\ref{fig:q3_k}. The correction rate increased rapidly when the increasing $K$ was small. However, we also observed that the accuracy converged to maximum rate as $K$ reached around 50. The complexity of the SVM is dependent on the number of support vectors and the data dimension ($K$). Hence, it's optimum to set $M$ at 50 to 80 to avoid overcomplexity. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.8\linewidth]{q3_k}
+		\caption{Accuracy affected by the number of K}
+		\label{fig:q3_k}
+	\end{center}
+\end{figure}
+
+\subsection{OVO and OVR}
+The method of multi-class extension of binary SVMs could affect the accuracy of classification. To investigate this, we fixed the other parameters as: RBF kernel, $\sigma = 2^{15}$, $C = 2^{15}$ and $K = 50$, and tested both OVO and OVR extended SVMs. The correction rates were averaged over 10 iterations to reduce the variance. The resulting accuracy rates are shown in Table ~\ref{tab:ovr_ovo}, which states that the OVR method averagely has 2 \% accuracy more than OVO method.  \\
+
+%\begin{table}[h!]
+%	\centering
+%	\caption{Accuracy of OVO and OVR}
+%	\label{tab:ovr_ovo}
+%	\begin{tabular}{ccc}
+%		\toprule
+%		Some & actual & content\\
+%		\midrule
+%		prettifies & the & content\\
+%		as & well & as\\
+%		using & the & booktabs package\\
+%		\bottomrule
+%	\end{tabular}
+%\end{table}
+
+\begin{table}[h!]
+	\centering
+	\caption{Comparing OVO and OVR}
+	\label{tab:ovr_ovo}
+	\begin{tabular}{ccc}
+		\toprule
+		~ & OVR & OVO\\
+		\midrule
+		Accuracy & 66.67\% & 64.27 \%\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\subsection{Kernel type}
+In this coursework, we applied and compared two types of kernel functions: RBF function (Eq.\ref{eq:RBF}) and Polynomial kernel function
+\begin{equation}
+k(\boldsymbol{x}, \boldsymbol{x'}) = (\boldsymbol{x^T} \boldsymbol{x'} + c)^M
+\label{eq:poly}
+\end{equation}
+where $M$ is the polynomial order. We trained the SVMs with two kernel functions separately and compared their performances. The RBF parameters $\sigma$ was set to \texttt{'auto'}, which enables the MATLAB function \texttt{fitcsvm} to automatically select an optimum value. The Polynomial order $M$ was set to 3. OVR extension was used for both kernel functions. The accuracy of such configuration is shown in Table.\ref{tab:rbf_poly}. The results can only suggest that the polynomial kernel function with this specific configuration yields better accuracy. However, the results were subjective to the parameters and more importantly, the data sets used. The two kernel functions generates different high dimensional kernel spaces, which should be optimum for different types of data sets.
+
+\begin{table}[h!]
+	\centering
+	\caption{Comparing RBF and Polynomial kernel function}
+	\label{tab:rbf_poly}
+	\begin{tabular}{ccc}
+		\toprule
+		~ & RBF & Polynomial\\
+		\midrule
+		Accuracy & 63.82\% & 65.00 \%\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\subsection{Kernel parameter $\sigma$ and $C$}
+Recall that in Question 2, the kernel parameter for RBF ($\sigma$) affected the overfitting and underfitting of the model, which affects the performance of the model with new testing data points. The parameter $C$ which controls the margin of each SVM also affect the generalization of the trained models. We trained and tested OVO extended SVMs and evaluated the correction rate varying the $\sigma$ from $2^{-5}$ to $2^{40}$ while varying the parameter $C$ from $2^{-20}$ to $2^{20}$. The result is visualized in Figure~\ref{fig:q3_ovo3D}. The accuracy for each parameter pair $\{\sigma, $C$ \}$ was averaged over 10 iterations. Figure~\ref{fig:q3_ovo3D} can be summarized as: 
+
+\begin{itemize}
+\item Increasing $C$ increased the accuracy when $C$ is below $2^5$. Further increasing $C$ did not increase the accuracy rate. However, higher value of $C$ may lead to overfitting if the model is to be tested by new testing data since it lead to smaller margin;
+\item The accuracy has a peak with respect to $\sigma$ and reduces when $\sigma$ was large. This verified the theory that $\sigma$ could lead to overfitting and increasing of testing lost.
+\end{itemize}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=1\linewidth]{q3_ovo3D}
+		\caption{Accuracy varying both $\sigma$ and $C$}
+		\label{fig:q3_ovo3D}
+	\end{center}
+\end{figure}
+
+
+Figure~\ref{fig:q3_confmat} contains the confusion matrices for some combinations of $\{\sigma, C \}$, with (a) showing the result of the optimal pair of parameters, (b) and (c) showing less optimal results. It can be found that the class 3 and 4 were less well-classified when the overall accuracy was lower. 
+
+\begin{figure}
+	
+	\begin{subfigure}[H]{0.3 \columnwidth}
+		\includegraphics[width = 1\columnwidth]{q3_confmat1}\hfill
+		\caption{$\sigma = 2^{10}$, \\$C = 2^5$}
+	\end{subfigure}
+	~
+	\begin{subfigure}[H]{0.3 \columnwidth}
+		\includegraphics[width = 1\columnwidth]{q3_confmat2}
+		\caption{$\sigma = 2^{10}$, \\$C = 2^0$}
+	\end{subfigure}
+	~
+	\begin{subfigure}[H]{0.3 \columnwidth}
+		\includegraphics[width = 1\columnwidth]{q3_confmat3}
+		\caption{$\sigma = 2^{7}$, \\$C = 2^5$}
+	\end{subfigure}
+		
+	\caption{Confusion matrices}
+	\label{fig:q3_confmat}
+\end{figure}
 
 
 
 
 {\small
-\bibliographystyle{ieee}
+\bibliographystyle{ieeetr}
 \bibliography{egbib}
 }
 
 \onecolumn
 \appendix
-\section{Appendix 1 Matlab Code}
-\subsection{Init.m}
-\lstinputlisting{init.m}
+\section{Appendix 1 MATLAB Code}
+\subsection{One vs Rest extension}
+\lstinputlisting{fMSVM1vR.m}
 
-\section{matlab code part 2}
-\lstinputlisting{init.m}
+\subsection{One vs one extension}
+\lstinputlisting{fMSVM1v1.m}
 
-
+\subsection{Bag of Words vector quantisation pr}
+\lstinputlisting{getDataHQ.m}
 
 \end{document}
