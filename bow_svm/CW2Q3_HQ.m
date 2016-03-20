@@ -3,13 +3,12 @@ clc; clear; close all;
 init;
 
 %% Data
-tic;
 [data_train, data_test] = getData_HQ('Caltech', 100);
 
 %% SVM
 kernel = 'RBF';
 C = Inf;
-sigma = 400;
+sigma = 100000;
 mode = 'ovr';
 
 switch mode
@@ -28,5 +27,3 @@ figure(1)
 conf_mat = confusionmat(predict_label, data_test(:,end));
 imagesc(conf_mat); colorbar;
 xlabel('Target class'), ylabel('Predicted class');
-
-toc;

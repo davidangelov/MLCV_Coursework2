@@ -45,8 +45,12 @@ data_class(data_train(:,end) ~= class) = -1;
 
 % test SVM
 [~, score_one] = predict(SVM,data_test(:,1:(end-1)));
-% score_one_norm = (score_one(:,2) - min(score_one(:,2)))/(max(score_one(:,2)) - min(score_one(:,2)));
-score = [score, score_one(:,2)];
+score_one_norm = score_one(:,2);
+
+% score_one_norm = (score_one_norm - min(score_one_norm))/(max(score_one_norm) - min(score_one_norm));
+score_one_norm = 1./(1 + exp(-score_one_norm));
+
+score = [score, score_one_norm];
 
 end
 
