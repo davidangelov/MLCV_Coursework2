@@ -167,7 +167,13 @@ Similarly, Figure~\ref{fig:q2_ovo_3} and~\ref{fig:q2_ovo} show the results of in
 \end{figure}
 
 \subsection{SVM parameters}
-The kernel parameter $\sigma$ affects the generalization or complexity of the model. Simpler models could have better generalization to unseen data with the risk of underfitting. Complex models on the other hand could be overfitted to training data and results in high testing loss (i.e. lower classification accuracy). Figure (a), (b) and (c) show                                                                                              \begin{figure}
+The parameters $\sigma$ for the RBF kernel function and the parameter $C$ for the misclassification penalty are problem dependent. Here we discuss the effect of the two parameters using the Toy Spiral data test. The kernel parameter $\sigma$ affects the generalization or complexity of the model. Simpler models could have better generalization to unseen data with the risk of underfitting. Complex models on the other hand could be overfitted to training data and results in high testing loss (i.e. lower classification accuracy). Figure (a), (b) and (c) in Figure~\ref{fig:q2_ovr_all} show the result of varying the parameter $\sigma$ while keeping $C$ unchanged. Result (a) demonstrates the case of overfitting and (c) demonstrates the case of underfitting.
+
+The parameter $C$ for each misclassified data point is proportional to its distance from the decision boundary. This indicates that $C$ controls the margin allowed for the SVMs. 
+
+
+
+\begin{figure}
 
 \begin{subfigure}[H]{0.3 \columnwidth}
 \includegraphics[width = 1\columnwidth]{q2_ovr_sig02}\hfill
@@ -198,7 +204,11 @@ The kernel parameter $\sigma$ affects the generalization or complexity of the mo
 		\includegraphics[width = 1\columnwidth]{q2_ovr_Cinf}
 		\caption{$C = \infty$}
 	\end{subfigure}
+	
+	\caption{Classification results with varying parameters $\sigma$ and $C$ for OVR}
+	\label{fig:q2_ovr_all}
 \end{figure}
+
 
 
 \section{Question 3}

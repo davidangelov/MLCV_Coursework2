@@ -7,13 +7,21 @@ parfor k = 1:100
 =======
 
 %% Data
+<<<<<<< Updated upstream
 [data_train, data_test] = getData_HQ('Caltech', 100);
 >>>>>>> origin/master
+=======
+tic;
+K = 50;
+[data_train, data_test] = getData_HQ('Caltech', K);
+toc;
+>>>>>>> Stashed changes
 
 %% SVM
+tic;
 kernel = 'RBF';
-C = Inf;
-sigma = 100000;
+C = 1000;
+sigma = 10000;
 mode = 'ovr';
 
 switch mode
