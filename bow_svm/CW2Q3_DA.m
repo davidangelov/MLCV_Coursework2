@@ -7,6 +7,7 @@ init;
 %% 
 mode = 2; % 1 for 1vsRest, 2 for 1vs1
 switch mode
+    
     case 1
         predict_label = fMSVM_1vR(data_train, data_test);
     case 2

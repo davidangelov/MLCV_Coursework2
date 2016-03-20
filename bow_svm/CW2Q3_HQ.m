@@ -1,16 +1,26 @@
 clc; clear; close all;
 
 init;
+<<<<<<< HEAD
 parfor k = 1:100
 [data_train, data_test] = getData_HQ('Caltech', k);
+=======
 
-%% 
-mode = 1; % 1 for 1vsRest, 2 for 1vs1
+%% Data
+[data_train, data_test] = getData_HQ('Caltech', 100);
+>>>>>>> origin/master
+
+%% SVM
+kernel = 'RBF';
+C = Inf;
+sigma = 100000;
+mode = 'ovr';
+
 switch mode
-    case 1
-        predict_label = fMSVM_1vR(data_train, data_test);
-    case 2
-        predict_label = fMSVM_1v1(data_train, data_test);
+    case 'ovr'
+        predict_label = fMSVM_1vR(data_train, data_test, kernel, C, sigma);
+    case 'ovo'
+        predict_label = fMSVM_1v1(data_train, data_test, kernel, C, sigma);
 end
 
 correct_rate = length(find(predict_label == data_test(:,end)))/length(data_test(:,end));
@@ -20,14 +30,7 @@ end
 %% Confusion matrix
 plot(correct_rate_array);
 
-target = zeros(10,150);
-output = zeros(10,150);
-
-for i = 1:150
-    
-    target(data_test(i,end), i) = 1;
-    output(predict_label(i,end), i) = 1;
-    
-end
-
-plotconfusion(target, output);
+figure(1)
+conf_mat = confusionmat(predict_label, data_test(:,end));
+imagesc(conf_mat); colorbar;
+xlabel('Target class'), ylabel('Predicted class');
