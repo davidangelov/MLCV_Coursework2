@@ -1,8 +1,7 @@
 clc; clear; close all;
 
 init;
-
-parfor k = 1:100
+k = 50;
 [data_train, data_test] = getData_HQ('Caltech', k);
 
 %% SVM
@@ -21,7 +20,7 @@ end
 correct_rate = length(find(predict_label == data_test(:,end)))/length(data_test(:,end));
 display(correct_rate, 'Correction rate');
 correct_rate_array(k) = correct_rate;
-end
+
 %% Confusion matrix
 plot(correct_rate_array);
 
